@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LQR Control of Inverted Pendulum</title>
+  <title>LQR System Equations</title>
   <style>
     body {
       font-family: sans-serif;
@@ -15,45 +15,87 @@
     img {
       width: 100%;
       height: auto;
-      margin: 20px 0;
     }
   </style>
+
+  <!-- ✅ Add MathJax Script Here -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-  <h1>Linear Quadratic Regulator (LQR) for Inverted Pendulum</h1>
+
+  <h1>Linear Quadratic Regulator – System Equations</h1>
+
+  <h2>System of Nonlinear Differential Equations</h2>
 
   <p>
-    This project applied a Linear Quadratic Regulator (LQR) to stabilize an inverted pendulum on a cart system.
-    Using Newtonian physics, the nonlinear dynamics of a 2-DOF system (cart position and pole angle) were
-    derived and linearized to form state-space equations.
+    The equations of motion for the inverted pendulum on a cart, derived using Newtonian mechanics, are:
   </p>
 
+  $$
+  \ddot{x} = \frac{-m^2 L^2 g \cos(\theta) \sin(\theta) + mL^2 \left( mL \omega^2 \sin(\theta) - dv \right) + mL^2 u}{mL^2(M + m \sin^2(\theta))}
+  $$
+
+  $$
+  \ddot{\theta} = \frac{(m + M) m g l \sin(\theta) - ml \cos(\theta) \left( mL \omega^2 \sin(\theta) - dv \right) + ml \cos(\theta) u}{mL^2 (M + m \sin(\theta))}
+  $$
+
+  <h2>State-Space Formulation</h2>
+
   <p>
-    Three simulation cases were run in MATLAB/Simulink to observe how different Q and R weightings in the cost
-    function impacted system performance:
+    We define the state vector as:
+  </p>
+
+  $$
+  x = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{bmatrix} = \begin{bmatrix} X \\ \dot{X} \\ \theta \\ \dot{\theta} \end{bmatrix}, \quad \dot{x} = \begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \\ \dot{x}_3 \\ \dot{x}_4 \end{bmatrix}
+  $$
+
+  <p>
+    Where:
   </p>
 
   <ul>
-    <li><strong>Case 1 (Baseline):</strong> Identity matrix Q and small R value. Smooth motion reaching the target in ~4s.</li>
-    <li><strong>Case 2 (Fast Response):</strong> Lowered Q velocity weight. System reached 10m twice as fast with higher control effort.</li>
-    <li><strong>Case 3 (High R):</strong> Large R value reduced control effort but failed to reach the final position in 10s.</li>
+    <li>\( \dot{x}_1 = x_2 = f_1(x, u) \)</li>
+    <li>\( \dot{x}_2 = f_2(x, u) \) — as defined in the nonlinear equation above</li>
+    <li>\( \dot{x}_3 = x_4 = f_3(x, u) \)</li>
+    <li>\( \dot{x}_4 = f_4(x, u) \) — as defined in the nonlinear equation above</li>
   </ul>
 
-  <p>
-    The simulation demonstrated how LQR can be tuned to prioritize speed, accuracy, or energy efficiency by
-    adjusting Q and R. The optimal gains were calculated using MATLAB's <code>lqr()</code> function, and
-    step responses were evaluated in Simulink.
-  </p>
-
-  <img src="/assets/images/lqr-simulation-case2.png" alt="LQR Simulation - Case 2" />
+  <h2>Linearized State-Space Matrices</h2>
 
   <p>
-    This project laid a foundation for advanced control topics like LQG and Kalman filtering.
-    It highlights the power of model-based control design when system dynamics are well-understood.
+    The linearized model around the upright equilibrium point results in:
   </p>
 
+  $$
+  A =
+  \begin{bmatrix}
+  0 & 1 & 0 & 0 \\
+  0 & \frac{-d}{M} & \frac{-mg}{M} & 0 \\
+  0 & 0 & 0 & 1 \\
+  0 & \frac{-d}{ML} & \frac{-(M + m)g}{ML} & 0
+  \end{bmatrix}, \quad
+  B =
+  \begin{bmatrix}
+  0 \\
+  \frac{1}{M} \\
+  0 \\
+  \frac{1}{ML}
+  \end{bmatrix}
+  $$
+
+  $$
+  C = \begin{bmatrix} 1 & 0 & 0 & 0 \end{bmatrix}, \quad
+  D = [0]
+  $$
+
   <p>
-    <a href="/">← Back to Home</a>
+    With initial conditions:
   </p>
+
+  $$
+  x_0 = \begin{bmatrix} y_0 \\ 0 \\ 0 \\ 0 \end{bmatrix}, \quad u_0 = 0
+  $$
+
 </body>
 </html>

@@ -11,6 +11,7 @@
       padding: 20px;
       max-width: 800px;
       margin: auto;
+      line-height: 1.6;
     }
     img {
       width: 100%;
@@ -31,14 +32,14 @@
 <body>
   <h1>Linear Quadratic Regulator – Inverted Pendulum on a Cart</h1>
 
-  <p>This project explores the application of a Linear Quadratic Regulator (LQR) to stabilize an inverted pendulum mounted on a moving cart. The system is a classic example in control theory, representing a nonlinear, unstable system that requires continuous feedback to maintain balance.</p>
+  <p>This project applies a Linear Quadratic Regulator (LQR) to balance an inverted pendulum on a cart. The system is a well-known problem in control theory because it is unstable and needs constant feedback to stay upright.</p>
 
   <figure style="text-align: center;">
     <img src="inverted-pendulum-fbd.png" alt="Inverted Pendulum" style="width: 50%;" />
     <figcaption>Figure: Free-body diagram of the inverted pendulum system.</figcaption>
   </figure>
 
-  <p>Using Newtonian mechanics, we derive the nonlinear equations of motion for the system and convert them into a linear state-space form around the upright equilibrium. These equations are then used in the design of an optimal controller using LQR.</p>
+  <p>The motion was modeled using Newtonian mechanics and then linearized around the upright position. The system was written in state-space form to design a controller using the LQR method.</p>
 
   <h2>System Equations</h2>
 
@@ -52,11 +53,10 @@
   $$
 
   <h3>State-Space Representation</h3>
-  <p>We define the state vector as:</p>
+  <p>The state vector is defined as:</p>
   $$
   x = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{bmatrix} = \begin{bmatrix} X \\ \dot{X} \\ \theta \\ \dot{\theta} \end{bmatrix}, \quad \dot{x} = \begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \\ \dot{x}_3 \\ \dot{x}_4 \end{bmatrix}
   $$
-  <p>Where:</p>
   <ul>
     <li>\( \dot{x}_1 = x_2 = f_1(x, u) \)</li>
     <li>\( \dot{x}_2 = f_2(x, u) \)</li>
@@ -65,7 +65,7 @@
   </ul>
 
   <h3>Linearized Matrices</h3>
-  <p>The linearized state-space matrices around the upright position are:</p>
+  <p>The linearized model near the upright position is:</p>
   $$
   A = \begin{bmatrix}
   0 & 1 & 0 & 0 \\
@@ -89,41 +89,51 @@
 
   <h2>Cost Function and Feedback Control</h2>
 
-  <p>The LQR approach calculates a feedback matrix \(K\) that drives the system toward stability while balancing performance and control effort. The controller minimizes a cost function defined as:</p>
+  <p>The LQR controller finds a feedback matrix \(K\) that balances the system while minimizing a cost. The cost function is:</p>
   $$
   J = \sum_{k=0}^{N} \left( x^T Q x + u^T R u \right)
   $$
 
-  <p>This equation assigns a penalty for two things: how far the system deviates from the desired state, and how much control effort is applied. The matrix \(Q\) penalizes state error, while \(R\) penalizes large control actions. By tuning these weights, different behavior can be emphasized, such as faster convergence or reduced force usage.</p>
+  <p>This cost measures how far the system is from the target state and how much control effort is used. The matrix \(Q\) sets the weight on state errors, while \(R\) sets the weight on control effort. These values can be tuned to make the system respond faster or use less energy.</p>
 
   <figure style="text-align: center;">
     <img src="feedback-loop.PNG" alt="LQR Feedback Loop" style="width: 60%;" />
-    <figcaption>Figure: The feedback loop shows how the system's state is measured and corrected using the LQR gain.</figcaption>
+    <figcaption>Figure: Feedback loop implementing the LQR gain for system stabilization.</figcaption>
   </figure>
 
   <h2>Controller Design and Testing</h2>
-  <p>Three LQR configurations were tested using different Q and R weightings:</p>
+  <p>Two controller configurations were tested based on different selections of \(Q\) and \(R\):</p>
   <ul>
-    <li><strong>Case 1:</strong> Identity matrix Q and low R. Smooth motion and moderate force. Reached the target in about 4 seconds.</li>
-    <li><strong>Case 2:</strong> Higher weight on position tracking. Faster response (around 2 seconds) but required more control effort.</li>
-    <li><strong>Case 3:</strong> Increased R. Control effort was reduced, but the cart did not reach the desired position in time.</li>
+    <li><strong>Normal Case:</strong> Balanced values of \(Q\) and \(R\). The robot reached the 10-meter mark in about 4 seconds with stable and smooth motion.</li>
+    <li><strong>Fast Case:</strong> High priority on reaching the target quickly. The robot reached 10 meters in about 2 seconds, but the pendulum angle was significantly larger during motion, resulting in more aggressive control.</li>
   </ul>
 
+  <h3>Initial Conditions</h3>
   <figure>
-    <img src="/assets/images/lqr-case1.png" alt="LQR Case 1 Simulation" />
-    <figcaption>Case 1: Balanced motion with standard Q and low R.</figcaption>
+    <img src="UprightCart-initial.PNG" alt="Initial Conditions" />
+    <figcaption>Initial configuration: Cart at rest, pendulum in upright position.</figcaption>
+  </figure>
+
+  <h3>Simulation Results</h3>
+  <figure>
+    <img src="Case_2-Snapshot.PNG" alt="Normal Case Parametric Results" />
+    <figcaption>Normal Case: Smooth trajectory with good settling time.</figcaption>
   </figure>
   <figure>
-    <img src="/assets/images/lqr-case2.png" alt="LQR Case 2 Simulation" />
-    <figcaption>Case 2: Faster performance due to aggressive Q tuning.</figcaption>
+    <img src="Case_3-Snapshot.PNG" alt="Fast Case Snapshot" />
+    <figcaption>Fast Case: Rapid motion with higher pendulum swing angle.</figcaption>
   </figure>
-  <figure>
-    <img src="/assets/images/lqr-case3.png" alt="LQR Case 3 Simulation" />
-    <figcaption>Case 3: Energy-efficient but underperforming response.</figcaption>
+
+  <h3>LQR Gain Values</h3>
+  <p>The feedback gain values \(K\) for each case are shown below. Each value corresponds to how much the controller responds to position, velocity, angle, and angular velocity.</p>
+
+  <figure style="text-align: center;">
+    <img src="gain-values.PNG" alt="LQR Gain Values" style="width: 80%;" />
+    <figcaption>Table: Feedback gain values from the LQR solution for each case. Note: Third case not shown</figcaption>
   </figure>
 
   <h2>Conclusion</h2>
-  <p>The LQR controller successfully stabilized the inverted pendulum. By carefully selecting the Q and R matrices, the controller can be tailored to emphasize rapid correction, smoother behavior, or energy conservation depending on the needs of the system.</p>
+  <p>The LQR controller was able to stabilize the inverted pendulum system. By adjusting the weights in the cost function, the system response can be made faster or smoother depending on the application. The results show how optimal control can be used to solve nonlinear control problems effectively.</p>
 
 </body>
 </html>

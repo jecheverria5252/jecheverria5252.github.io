@@ -38,7 +38,7 @@
     <figcaption>Figure: Free-body diagram of the inverted pendulum system.</figcaption>
   </figure>
 
-  <p>Using Newtonian mechanics, we derive the nonlinear equations of motion for the system and convert them into a linear state-space form around the upright equilibrium. These equations are then used in the design of an optimal controller using LQR, with the goal of minimizing a quadratic cost function while ensuring system stability.</p>
+  <p>Using Newtonian mechanics, we derive the nonlinear equations of motion for the system and convert them into a linear state-space form around the upright equilibrium. These equations are then used in the design of an optimal controller using LQR.</p>
 
   <h2>System Equations</h2>
 
@@ -87,29 +87,43 @@
   x_0 = \begin{bmatrix} y_0 \\ 0 \\ 0 \\ 0 \end{bmatrix}, \quad u_0 = 0
   $$
 
-  <h2>Controller Design & Testing</h2>
-  <p>Three LQR designs were tested using different Q and R weightings:</p>
+  <h2>Cost Function and Feedback Control</h2>
+
+  <p>The LQR approach calculates a feedback matrix \(K\) that drives the system toward stability while balancing performance and control effort. The controller minimizes a cost function defined as:</p>
+  $$
+  J = \sum_{k=0}^{N} \left( x^T Q x + u^T R u \right)
+  $$
+
+  <p>This equation assigns a penalty for two things: how far the system deviates from the desired state, and how much control effort is applied. The matrix \(Q\) penalizes state error, while \(R\) penalizes large control actions. By tuning these weights, different behavior can be emphasized, such as faster convergence or reduced force usage.</p>
+
+  <figure style="text-align: center;">
+    <img src="feedback-loop.PNG" alt="LQR Feedback Loop" style="width: 60%;" />
+    <figcaption>Figure: The feedback loop shows how the system's state is measured and corrected using the LQR gain.</figcaption>
+  </figure>
+
+  <h2>Controller Design and Testing</h2>
+  <p>Three LQR configurations were tested using different Q and R weightings:</p>
   <ul>
-    <li><strong>Case 1:</strong> Identity matrix Q, low R — smooth behavior, final position reached in ~4 seconds.</li>
-    <li><strong>Case 2:</strong> Lower velocity weight in Q — faster response, reached target in ~2 seconds with increased control force.</li>
-    <li><strong>Case 3:</strong> High R — reduced control force, but failed to reach the 10 m target within 10 seconds.</li>
+    <li><strong>Case 1:</strong> Identity matrix Q and low R. Smooth motion and moderate force. Reached the target in about 4 seconds.</li>
+    <li><strong>Case 2:</strong> Higher weight on position tracking. Faster response (around 2 seconds) but required more control effort.</li>
+    <li><strong>Case 3:</strong> Increased R. Control effort was reduced, but the cart did not reach the desired position in time.</li>
   </ul>
 
   <figure>
     <img src="/assets/images/lqr-case1.png" alt="LQR Case 1 Simulation" />
-    <figcaption>Case 1: Smooth motion, low R, standard Q.</figcaption>
+    <figcaption>Case 1: Balanced motion with standard Q and low R.</figcaption>
   </figure>
   <figure>
     <img src="/assets/images/lqr-case2.png" alt="LQR Case 2 Simulation" />
-    <figcaption>Case 2: Fastest response by adjusting Q matrix.</figcaption>
+    <figcaption>Case 2: Faster performance due to aggressive Q tuning.</figcaption>
   </figure>
   <figure>
     <img src="/assets/images/lqr-case3.png" alt="LQR Case 3 Simulation" />
-    <figcaption>Case 3: Slow response due to heavy R weighting.</figcaption>
+    <figcaption>Case 3: Energy-efficient but underperforming response.</figcaption>
   </figure>
 
   <h2>Conclusion</h2>
-  <p>The LQR controller was shown to effectively stabilize the inverted pendulum system, with performance dependent on proper Q and R matrix tuning. Lowering the cost of velocity and control yielded faster convergence, while increasing R prioritized control effort but degraded tracking performance.</p>
+  <p>The LQR controller successfully stabilized the inverted pendulum. By carefully selecting the Q and R matrices, the controller can be tailored to emphasize rapid correction, smoother behavior, or energy conservation depending on the needs of the system.</p>
 
 </body>
 </html>

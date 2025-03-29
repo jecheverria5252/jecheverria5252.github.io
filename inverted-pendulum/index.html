@@ -1,10 +1,10 @@
-<!-- inverted-pendulum/index.html -->
+<!-- lqr/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inverted Pendulum Project</title>
+  <title>LQR Control of Inverted Pendulum</title>
   <style>
     body {
       font-family: sans-serif;
@@ -15,31 +15,45 @@
     img {
       width: 100%;
       height: auto;
+      margin: 20px 0;
     }
   </style>
 </head>
 <body>
-  <h1>Inverted Pendulum Project</h1>
+  <h1>Linear Quadratic Regulator (LQR) for Inverted Pendulum</h1>
+
   <p>
-    This project focused on simulating an inverted pendulum using classical control techniques in Simulink.
-    The goal was to stabilize the system via a feedback controller and analyze performance under different disturbance inputs.
+    This project applied a Linear Quadratic Regulator (LQR) to stabilize an inverted pendulum on a cart system.
+    Using Newtonian physics, the nonlinear dynamics of a 2-DOF system (cart position and pole angle) were
+    derived and linearized to form state-space equations.
   </p>
 
   <p>
-    The project included:
-    <ul>
-      <li>Mathematical modeling of the pendulum system</li>
-      <li>Simulink-based system simulation</li>
-      <li>Controller design using pole placement and LQR</li>
-      <li>Performance analysis with step and impulse responses</li>
-    </ul>
+    Three simulation cases were run in MATLAB/Simulink to observe how different Q and R weightings in the cost
+    function impacted system performance:
   </p>
 
-  <img src="/assets/images/inverted-pendulum-diagram.png" alt="Inverted Pendulum Diagram" />
+  <ul>
+    <li><strong>Case 1 (Baseline):</strong> Identity matrix Q and small R value. Smooth motion reaching the target in ~4s.</li>
+    <li><strong>Case 2 (Fast Response):</strong> Lowered Q velocity weight. System reached 10m twice as fast with higher control effort.</li>
+    <li><strong>Case 3 (High R):</strong> Large R value reduced control effort but failed to reach the final position in 10s.</li>
+  </ul>
+
+  <p>
+    The simulation demonstrated how LQR can be tuned to prioritize speed, accuracy, or energy efficiency by
+    adjusting Q and R. The optimal gains were calculated using MATLAB's <code>lqr()</code> function, and
+    step responses were evaluated in Simulink.
+  </p>
+
+  <img src="/assets/images/lqr-simulation-case2.png" alt="LQR Simulation - Case 2" />
+
+  <p>
+    This project laid a foundation for advanced control topics like LQG and Kalman filtering.
+    It highlights the power of model-based control design when system dynamics are well-understood.
+  </p>
 
   <p>
     <a href="/">← Back to Home</a>
   </p>
 </body>
 </html>
-

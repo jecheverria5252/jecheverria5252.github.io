@@ -1,1 +1,54 @@
+<!-- neural-network/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sequence-to-Sequence Neural Network for Control Systems</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sequence-to-Sequence Neural Network for Control Systems</h1>
+
+  <p>
+    This project explored the use of Sequence-to-Sequence (Seq2Seq) neural network architectures
+    to model and predict control outputs in closed-loop temperature regulation systems.
+  </p>
+
+  <p>
+    Traditional PID controllers were compared to data-driven models trained on time-series
+    temperature and control signal data. The neural networks learned to predict future control actions
+    based on historical sequences of input-output data.
+  </p>
+
+  <p>
+    Highlights include:
+    <ul>
+      <li>Implemented encoder-decoder models in TensorFlow/Keras</li>
+      <li>Preprocessed time-series control system data for sequence learning</li>
+      <li>Trained models to improve temperature regulation stability</li>
+      <li>Evaluated model performance against traditional control strategies</li>
+    </ul>
+  </p>
+
+  <img src="/assets/images/seq2seq-architecture.png" alt="Seq2Seq Neural Network Architecture" />
+  <img src="/assets/images/temperature-prediction.png" alt="Temperature Prediction vs Ground Truth" />
+
+  <p>
+    <a href="/">← Back to Home</a>
+  </p>
+</body>
+</html>
 

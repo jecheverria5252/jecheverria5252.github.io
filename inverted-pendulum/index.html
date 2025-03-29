@@ -116,20 +116,34 @@
 
   <h3>Simulation Results</h3>
   <figure>
-    <img src="Case_2-Snapshot.PNG" alt="Normal Case Parametric Results" />
+    <img src="Case_1-parametric.PNG" alt="Normal Case Parametric Results" />
     <figcaption>Normal Case: Smooth trajectory with good settling time.</figcaption>
   </figure>
   <figure>
-    <img src="Cas_3-Snapshot.PNG" alt="Fast Case Snapshot" />
-    <figcaption>Fast Case: Rapid motion with higher pendulum swing angle.</figcaption>
+    <img src="Case_1-Snapshot.PNG" alt="Normal Case Snapshot" />
+    <figcaption>Snapshot of the Normal Case showing stable progression toward the target.</figcaption>
+  </figure>
+  <figure>
+    <img src="Case_2-parametric.PNG" alt="Fast Case Parametric Results" />
+    <figcaption>Fast Case: Quick trajectory with high control activity.</figcaption>
+  </figure>
+  <figure>
+    <img src="Case_2-Snapshot.PNG" alt="Fast Case Snapshot" />
+    <figcaption>Snapshot of the Fast Case showing rapid movement and aggressive correction.</figcaption>
   </figure>
 
   <h3>LQR Gain Values</h3>
-  <p>The feedback gain values \(K\) for each case are shown below. Each value corresponds to how much the controller responds to position, velocity, angle, and angular velocity.</p>
+  <p>The feedback gain values \(K\) for each case are shown below. Each value corresponds to how much the controller responds to position, velocity, angle, and angular velocity. In general:</p>
+  <ul>
+    <li>Larger values of \(k_3\) and \(k_4\) indicate stronger correction for pendulum angle and angular speed.</li>
+    <li>The Fast Case used higher gains to react quickly, resulting in faster movement and more swing.</li>
+    <li>The Normal Case used moderate gains, balancing speed and stability.</li>
+    <li>An additional test (not shown here) with very low gains resulted in extremely slow behavior. The robot never reached the target within the test window.</li>
+  </ul>
 
   <figure style="text-align: center;">
     <img src="gain-values.PNG" alt="LQR Gain Values" style="width: 80%;" />
-    <figcaption>Table: Feedback gain values from the LQR solution for each case. Note: Third case not shown</figcaption>
+    <figcaption>Table: Feedback gain values from the LQR solution for each case.</figcaption>
   </figure>
 
   <h2>Conclusion</h2>

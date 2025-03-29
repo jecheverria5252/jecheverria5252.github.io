@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LQR System Equations</title>
+  <title>LQR: Inverted Pendulum Control</title>
   <style>
     body {
       font-family: sans-serif;
@@ -16,86 +16,100 @@
       width: 100%;
       height: auto;
     }
+    figure {
+      margin: 30px 0;
+    }
+    figcaption {
+      text-align: center;
+      font-size: 0.9em;
+      color: #555;
+    }
   </style>
-
-  <!-- ✅ Add MathJax Script Here -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+  <h1>Linear Quadratic Regulator – Inverted Pendulum on a Cart</h1>
 
-  <h1>Linear Quadratic Regulator – System Equations</h1>
+  <p>This project explores the application of a Linear Quadratic Regulator (LQR) to stabilize an inverted pendulum mounted on a moving cart. The system is a classic example in control theory, representing a nonlinear, unstable system that requires continuous feedback to maintain balance.</p>
 
-  <h2>System of Nonlinear Differential Equations</h2>
+  <figure>
+    <img src="/assets/images/inverted-pendulum-fbd.png" alt="Inverted Pendulum Free Body Diagram" />
+    <figcaption>Figure: Free-body diagram of the inverted pendulum system. The cart of mass \( M \) moves horizontally, while a pendulum of mass \( m \) and length \( L \) rotates about its pivot. A control force \( F \) is applied to the cart, and damping proportional to velocity \( d \cdot v \) acts on the wheels.</figcaption>
+  </figure>
 
-  <p>
-    The equations of motion for the inverted pendulum on a cart, derived using Newtonian mechanics, are:
-  </p>
+  <p>Using Newtonian mechanics, we derive the nonlinear equations of motion for the system and convert them into a linear state-space form around the upright equilibrium. These equations are then used in the design of an optimal controller using LQR, with the goal of minimizing a quadratic cost function while ensuring system stability.</p>
 
+  <h2>System Equations</h2>
+
+  <h3>Nonlinear Differential Equations</h3>
+  <p>The equations of motion for the inverted pendulum on a cart are:</p>
   $$
-  \ddot{x} = \frac{-m^2 L^2 g \cos(\theta) \sin(\theta) + mL^2 \left( mL \omega^2 \sin(\theta) - dv \right) + mL^2 u}{mL^2(M + m \sin^2(\theta))}
+  \ddot{x} = \frac{-m^2 L^2 g \cos(\theta) \sin(\theta) + mL^2 ( mL \omega^2 \sin(\theta) - dv ) + mL^2 u}{mL^2(M + m \sin^2(\theta))}
+  $$
+  $$
+  \ddot{\theta} = \frac{(m + M) m g l \sin(\theta) - ml \cos(\theta) ( mL \omega^2 \sin(\theta) - dv ) + ml \cos(\theta) u}{mL^2 (M + m \sin(\theta))}
   $$
 
-  $$
-  \ddot{\theta} = \frac{(m + M) m g l \sin(\theta) - ml \cos(\theta) \left( mL \omega^2 \sin(\theta) - dv \right) + ml \cos(\theta) u}{mL^2 (M + m \sin(\theta))}
-  $$
-
-  <h2>State-Space Formulation</h2>
-
-  <p>
-    We define the state vector as:
-  </p>
-
+  <h3>State-Space Representation</h3>
+  <p>We define the state vector as:</p>
   $$
   x = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{bmatrix} = \begin{bmatrix} X \\ \dot{X} \\ \theta \\ \dot{\theta} \end{bmatrix}, \quad \dot{x} = \begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \\ \dot{x}_3 \\ \dot{x}_4 \end{bmatrix}
   $$
-
-  <p>
-    Where:
-  </p>
-
+  <p>Where:</p>
   <ul>
     <li>\( \dot{x}_1 = x_2 = f_1(x, u) \)</li>
-    <li>\( \dot{x}_2 = f_2(x, u) \) — as defined in the nonlinear equation above</li>
+    <li>\( \dot{x}_2 = f_2(x, u) \)</li>
     <li>\( \dot{x}_3 = x_4 = f_3(x, u) \)</li>
-    <li>\( \dot{x}_4 = f_4(x, u) \) — as defined in the nonlinear equation above</li>
+    <li>\( \dot{x}_4 = f_4(x, u) \)</li>
   </ul>
 
-  <h2>Linearized State-Space Matrices</h2>
-
-  <p>
-    The linearized model around the upright equilibrium point results in:
-  </p>
-
+  <h3>Linearized Matrices</h3>
+  <p>The linearized state-space matrices around the upright position are:</p>
   $$
-  A =
-  \begin{bmatrix}
+  A = \begin{bmatrix}
   0 & 1 & 0 & 0 \\
   0 & \frac{-d}{M} & \frac{-mg}{M} & 0 \\
   0 & 0 & 0 & 1 \\
   0 & \frac{-d}{ML} & \frac{-(M + m)g}{ML} & 0
   \end{bmatrix}, \quad
-  B =
-  \begin{bmatrix}
+  B = \begin{bmatrix}
   0 \\
   \frac{1}{M} \\
   0 \\
   \frac{1}{ML}
   \end{bmatrix}
   $$
-
   $$
-  C = \begin{bmatrix} 1 & 0 & 0 & 0 \end{bmatrix}, \quad
-  D = [0]
+  C = \begin{bmatrix} 1 & 0 & 0 & 0 \end{bmatrix}, \quad D = [0]
   $$
-
-  <p>
-    With initial conditions:
-  </p>
-
   $$
   x_0 = \begin{bmatrix} y_0 \\ 0 \\ 0 \\ 0 \end{bmatrix}, \quad u_0 = 0
   $$
+
+  <h2>Controller Design & Testing</h2>
+  <p>Three LQR designs were tested using different Q and R weightings:</p>
+  <ul>
+    <li><strong>Case 1:</strong> Identity matrix Q, low R — smooth behavior, final position reached in ~4 seconds.</li>
+    <li><strong>Case 2:</strong> Lower velocity weight in Q — faster response, reached target in ~2 seconds with increased control force.</li>
+    <li><strong>Case 3:</strong> High R — reduced control force, but failed to reach the 10 m target within 10 seconds.</li>
+  </ul>
+
+  <figure>
+    <img src="/assets/images/lqr-case1.png" alt="LQR Case 1 Simulation" />
+    <figcaption>Case 1: Smooth motion, low R, standard Q.</figcaption>
+  </figure>
+  <figure>
+    <img src="/assets/images/lqr-case2.png" alt="LQR Case 2 Simulation" />
+    <figcaption>Case 2: Fastest response by adjusting Q matrix.</figcaption>
+  </figure>
+  <figure>
+    <img src="/assets/images/lqr-case3.png" alt="LQR Case 3 Simulation" />
+    <figcaption>Case 3: Slow response due to heavy R weighting.</figcaption>
+  </figure>
+
+  <h2>Conclusion</h2>
+  <p>The LQR controller was shown to effectively stabilize the inverted pendulum system, with performance dependent on proper Q and R matrix tuning. Lowering the cost of velocity and control yielded faster convergence, while increasing R prioritized control effort but degraded tracking performance.</p>
 
 </body>
 </html>

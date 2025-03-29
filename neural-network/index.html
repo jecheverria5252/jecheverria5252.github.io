@@ -1,54 +1,63 @@
-<!-- neural-network/index.html -->
+<!-- mpc-predictive-control/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sequence-to-Sequence Neural Network for Control Systems</title>
+  <title>Forecasting Control Signals with Attention</title>
   <style>
     body {
       font-family: sans-serif;
       padding: 20px;
       max-width: 800px;
       margin: auto;
+      line-height: 1.6;
     }
     img {
       width: 100%;
       height: auto;
-      margin-top: 20px;
+    }
+    figure {
+      margin: 30px 0;
+    }
+    figcaption {
+      text-align: center;
+      font-size: 0.9em;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <h1>Sequence-to-Sequence Neural Network for Control Systems</h1>
+  <h1>Forecasting Control Signals with Attention</h1>
 
-  <p>
-    This project explored the use of Sequence-to-Sequence (Seq2Seq) neural network architectures
-    to model and predict control outputs in closed-loop temperature regulation systems.
-  </p>
+  <p>This project explores how machine learning can be used to forecast control signals in a temperature system. Instead of reacting to changes like traditional controllers, our model learns from past behavior to predict what comes next.</p>
 
-  <p>
-    Traditional PID controllers were compared to data-driven models trained on time-series
-    temperature and control signal data. The neural networks learned to predict future control actions
-    based on historical sequences of input-output data.
-  </p>
+  <h2>Why This Matters</h2>
+  <p>In systems like heating or cooling, predicting the right control input can improve efficiency and stability. Traditional feedback controllers (like PID) work well, but they don’t learn. Neural networks with attention mechanisms can improve on this by using memory of past errors to make smarter predictions.</p>
 
-  <p>
-    Highlights include:
-    <ul>
-      <li>Implemented encoder-decoder models in TensorFlow/Keras</li>
-      <li>Preprocessed time-series control system data for sequence learning</li>
-      <li>Trained models to improve temperature regulation stability</li>
-      <li>Evaluated model performance against traditional control strategies</li>
-    </ul>
-  </p>
+  <h2>The Approach</h2>
+  <ul>
+    <li>Input: a sequence of temperature errors (how far off from the target)</li>
+    <li>Output: a sequence of control signals (how much heat to apply)</li>
+    <li>Model 1: a basic GRU sequence model</li>
+    <li>Model 2: the same model with an attention mechanism</li>
+  </ul>
 
-  <img src="/assets/images/seq2seq-architecture.png" alt="Seq2Seq Neural Network Architecture" />
-  <img src="/assets/images/temperature-prediction.png" alt="Temperature Prediction vs Ground Truth" />
+  <figure>
+    <img src="mpc-model.png" alt="Model Diagram" style="width: 90%;" />
+    <figcaption>Figure: Sequence model with attention used to predict control output from error signals.</figcaption>
+  </figure>
 
-  <p>
-    <a href="/">← Back to Home</a>
-  </p>
+  <h2>Training and Results</h2>
+  <p>The model was trained on over 5,000 data points from a simulated control system. The attention-based model was more accurate and stable compared to the baseline. It learned when to focus on certain parts of the input to make better predictions.</p>
+
+  <figure>
+    <img src="mpc-prediction.png" alt="Prediction Results" />
+    <figcaption>Figure: Predicted control signals (orange) compared to actual values (blue).</figcaption>
+  </figure>
+
+  <h2>Conclusion</h2>
+  <p>Using attention helps neural networks make better predictions in control systems. This approach shows potential for improving performance in real-world tasks like climate control, energy systems, or robotics where forecasting control inputs matters.</p>
+
 </body>
 </html>
-

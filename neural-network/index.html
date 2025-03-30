@@ -51,7 +51,7 @@
   </p>
 
   <figure>
-    <img src="tsp-vs-control.png" alt="Set-point vs Control Signal" />
+    <img src="Temp-SP_Vs_Control-Signal.png" alt="Set-point vs Control Signal" />
     <figcaption>Figure: Simulated response of a traditional PI-controlled system showing how the control signal responds to temperature changes.</figcaption>
   </figure>
 
@@ -76,8 +76,12 @@
     To improve performance, a scaled dot-product attention mechanism was added. Attention allows the model to prioritize important time steps in the input sequence, helping it respond better to dynamic changes.
   </p>
   <figure>
-    <img src="attention-block-diagram.png" alt="Attention Model Block Diagram" />
-    <figcaption>Block diagram of the attention-enhanced Seq2Seq model.</figcaption>
+    <img src="Enc-Dec_Structure.png" alt="Baseline Model Block Diagram" />
+    <figcaption>Block diagram of the Baseline Seq2Seq model show simplistic.</figcaption>
+  </figure>
+    <figure>
+    <img src="Enc-Dec_Structure_attention.png" alt="Model Block with Attention Diagram" />
+    <figcaption>The attention Seq2Seq model block diagram is shown to be simplistic.</figcaption>
   </figure>
   <p>
     The following equations describe the model’s hidden state update and output:

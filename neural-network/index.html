@@ -95,5 +95,49 @@
   <p>
     The attention mechanism uses alignment scores between encoder and decoder to create a context vector, which helps the decoder make more accurate predictions.
   </p>
+  <!-- Sections 1–3 already included above -->
+
+  <h3>4. Training Predictions Over Time</h3>
+  <p>
+    To evaluate learning progression, we compared predicted vs. actual control signals at selected training epochs: 2, 5, 10, and 20. The baseline model exhibited irregular fluctuations early in training, while the attention-based model demonstrated smoother alignment with target signals, particularly by epoch 20.
+  </p>
+
+  <figure>
+    <img src="Baseline_Epoch-loss.png" alt="Baseline Predictions Over Time" />
+    <figcaption>Prediction outputs from the baseline model at epochs 2, 5, 10, and 20. Notice the instability in early stages and lack of clear tracking.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="Att_Epoch-loss.png" alt="Attention Model Predictions Over Time" />
+    <figcaption>Prediction outputs from the attention-based model. Smoother responses and closer alignment are visible, especially by epoch 20.</figcaption>
+  </figure>
+
+  <h3>5. Test Set Performance</h3>
+  <p>
+    After training, both models were evaluated on a held-out test set of 1,080 samples. The goal was to assess generalization and predictive accuracy under unseen conditions.
+  </p>
+  <ul>
+    <li><strong>Baseline Model Test MSE:</strong> 0.1903</li>
+    <li><strong>Attention-Based Model Test MSE:</strong> 0.0914</li>
+  </ul>
+  <p>
+    The attention-based model achieved nearly half the test loss of the baseline model. It responded more effectively to rapid changes in the target control signal and tracked transitions with greater stability.
+  </p>
+
+  <figure>
+    <img src="Baseline-results.png" alt="Baseline Test Predictions" />
+    <figcaption>Test predictions for the baseline model. Notice drift and lag, particularly at key transition points.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="Att-results.png" alt="Attention Test Predictions" />
+    <figcaption>Test predictions for the attention-based model. The prediction closely follows set-point changes and shows less overshoot.</figcaption>
+  </figure>
+
+  <h3>6. Conclusion</h3>
+  <p>
+    This project explored machine learning-based temperature control using sequence-to-sequence models with and without attention. The baseline model offered modest performance, but struggled with rapid changes. In contrast, the attention-based model showed faster learning, better prediction stability, and significantly reduced test error. The attention mechanism's ability to prioritize key moments in the input sequence proved beneficial in handling dynamic system behavior. These results suggest that attention-based neural models hold promise for future applications in adaptive, data-driven control systems.
+  </p>
+
 </body>
 </html>

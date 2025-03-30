@@ -32,58 +32,41 @@
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-  <h1>Model Predictive Control with Seq2Seq + Attention</h1>
+  <h1>Temperature Control Using Seq2Seq and Attention</h1>
 
-  <p>This project explores how sequence-based machine learning models can be used to regulate a control system with changing set-points. A baseline Seq2Seq model and an attention-enhanced variant were trained to learn the dynamics of a temperature regulation system, with the goal of predicting control signals that follow desired set-points.</p>
+  <h2>Project Overview</h2>
+  <p>
+    Closed-loop feedback controllers are commonly used for temperature regulation in the field of process control. Designed for stability and reliability, feedback controllers maintain process stability with minimal deviation from target values. However, feedback regulators face limitations in complex scenarios, as they rely solely on real-time data without learning from past historical information.
+  </p>
+  <p>
+    Recent research on Sequence-to-Sequence machine learning models with attention mechanisms offers promising solutions for more adaptive, dynamic temperature control. The work presented in this thesis project develops a tailored machine learning model based on scaled dot-product attention to predict temperature control signals from error values, using simulated temperature control data. The performance of an attention-based model was compared to a baseline sequence-to-sequence model, demonstrating improved alignment with target control signal and highlighting its potential for effective temperature regulation.
+  </p>
 
-  <h2>Model Overview</h2>
-  <p>The architecture is based on an encoder-decoder (Seq2Seq) neural network, commonly used in time series forecasting. Attention was added to improve performance under rapid transitions. The network equations were:</p>
-
-  $$
-  h_t = \tanh(W_{in} \cdot h_{t-1} + U \cdot x_t + b)
-  $$
-  $$
-  y_t = W_{out} \cdot h_t + c
-  $$
-
-  <h2>Training Results</h2>
-  <p>The baseline model struggled with dynamic transitions. By contrast, the attention model better followed changing set-points and adapted to fast shifts.</p>
-
-  <figure>
-    <img src="baseline-loss.png" alt="Baseline Training Loss" />
-    <figcaption>Loss per batch across epochs for baseline Seq2Seq model</figcaption>
-  </figure>
+  <h2>Background: Closed-Loop Control Systems</h2>
+  <p>
+    In traditional closed-loop control systems (CLCS), a controller adjusts the input to a system based on the difference between the desired output (the set-point) and the actual output. This is often done using a proportional-integral (PI) or proportional-integral-derivative (PID) controller.
+  </p>
+  <p>
+    PI control combines immediate error correction with a memory of past errors. While simple and effective in many industrial settings, these controllers can struggle when set-points change rapidly or when system dynamics are nonlinear or poorly understood. Derivative terms, often used in PID control, are sensitive to noise and are commonly excluded in temperature regulation.
+  </p>
 
   <figure>
-    <img src="attention-loss.png" alt="Attention Model Training Loss" />
-    <figcaption>Loss per batch across epochs for attention-based model</figcaption>
+    <img src="tsp-vs-control.png" alt="Set-point vs Control Signal" />
+    <figcaption>Figure: Simulated response of a traditional PI-controlled system showing how the control signal responding to temperature changes.</figcaption>
   </figure>
 
-  <h2>Learning Progress Over Epochs</h2>
-  <figure>
-    <img src="baseline-training.png" alt="Baseline Training Progress" />
-    <figcaption>Predictions from the baseline model over epochs. The model struggles to learn sharp changes.</figcaption>
-  </figure>
+  
+  <h2>Models Overview</h2>
+  <p>
+    Two models were developed for comparison:
+  </p>
+  <ul>
+    <li><strong>Baseline Model:</strong> A basic Seq2Seq model using gated recurrent units (GRUs).</li>
+    <li><strong>Attention Model:</strong> An enhanced version with scaled dot-product attention between encoder and decoder.</li>
+  </ul>
 
-  <figure>
-    <img src="attention-training.png" alt="Attention Training Progress" />
-    <figcaption>Predictions with attention model improve over time. Better alignment with system behavior emerges by Epoch 20.</figcaption>
-  </figure>
-
-  <h2>Test Predictions</h2>
-  <figure>
-    <img src="baseline-test.png" alt="Baseline Test Predictions" />
-    <figcaption>Baseline model test output. Fails to respond to shifts in set-point.</figcaption>
-  </figure>
-
-  <figure>
-    <img src="attention-test.png" alt="Attention Model Test Predictions" />
-    <figcaption>Attention-enhanced model tracks the set-point more effectively, especially during transitions.</figcaption>
-  </figure>
-
-  <h2>Conclusion</h2>
-  <p>Both models were trained to map from past temperature states and future set-points to control signals. While the baseline Seq2Seq model learned the general behavior, it could not handle rapid changes. The attention-based model learned to prioritize key time steps and adjust more effectively. This improvement was confirmed by the lower average mean squared error (MSE) on the test set—nearly 50% lower than the baseline.</p>
-
-  <p>With refinement, attention-based models may support adaptive control tasks where traditional methods are difficult to tune or lack flexibility.</p>
+  <p>
+    Both models take as input a sequence of past temperatures and set-points, and output a predicted sequence of control signals. The attention model is designed to selectively focus on the most relevant parts of the input sequence when making predictions.
+  </p>
 </body>
 </html>

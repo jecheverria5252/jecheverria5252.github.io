@@ -66,7 +66,30 @@
   </ul>
 
   <p>
-    Both models take as input a sequence of past temperatures and set-points, and output a predicted sequence of control signals. The attention model is designed to selectively focus on the most relevant parts of the input sequence when making predictions.
+    Both models take as input a sequence of past error, and output a predicted sequence of control signals. The attention model is designed to selectively focus on the most relevant parts of the input sequence (error) when making predictions.
+  </p>
+    <h2>Attention-Enhanced Model</h2>
+  <p>
+    Sequence-to-sequence (Seq2Seq) models are commonly used for making predictions over time. In this project, the model takes a sequence of error signal and outputs a predicted sequence of control signals. A baseline model using gated recurrent units was used was used a baseline model.
+  </p>
+  <p>
+    To improve performance, a scaled dot-product attention mechanism was added. Attention allows the model to prioritize important time steps in the input sequence, helping it respond better to dynamic changes.
+  </p>
+  <figure>
+    <img src="attention-block-diagram.png" alt="Attention Model Block Diagram" />
+    <figcaption>Block diagram of the attention-enhanced Seq2Seq model.</figcaption>
+  </figure>
+  <p>
+    The following equations describe the model’s hidden state update and output:
+  </p>
+  $$
+  h_t = \tanh(W_{in} \cdot h_{t-1} + U \cdot x_t + b)
+  $$
+  $$
+  y_t = W_{out} \cdot h_t + c
+  $$
+  <p>
+    The attention mechanism uses alignment scores between encoder and decoder to create a context vector, which helps the decoder make more accurate predictions.
   </p>
 </body>
 </html>

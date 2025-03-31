@@ -1,27 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
-    <title>My Resume</title>
-    <style>
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        iframe {
-            width: 90%;
-            height: 90vh;
-            border: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow" />
+  <title>My Resume</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f4f4f4;
+    }
+    iframe {
+      width: 90%;
+      height: 90vh;
+      border: none;
+    }
+    .mobile-link {
+      display: none;
+      font-size: 1.2em;
+    }
+  </style>
 </head>
 <body>
-    <iframe src="./JEcheverria5252_ResumeInterview.pdf"></iframe>
+  <iframe id="resumeFrame" src="./JEcheverria5252_ResumeInterview.pdf"></iframe>
+  <div id="mobileMessage" class="mobile-link">
+    <p>
+      Your device doesn’t support embedded PDFs. <br/>
+      <a href="./JEcheverria5252_ResumeInterview.pdf" target="_blank" rel="noopener">Click here to view my resume with working links.</a>
+    </p>
+  </div>
+
+  <script>
+    function isMobileDevice() {
+      return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    }
+
+    if (isMobileDevice()) {
+      document.getElementById("resumeFrame").style.display = "none";
+      document.getElementById("mobileMessage").style.display = "block";
+    }
+  </script>
 </body>
 </html>
